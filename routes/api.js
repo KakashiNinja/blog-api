@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express.Router()
 const Post = require('../models/post')
+const { body, validationResult } = require('express-validator')
 
 // get all posts
 app.get('/posts', async (req, res, next) => {
@@ -30,7 +31,37 @@ app.get('/posts/:id', async (req, res, next) => {
 })
 
 // create post
-app.post('/posts', (req, res, next) => {})
+app.post('/posts', [
+  body('author_name', 'Should not be empty').trim().escape(),
+  body('title', 'Should not be empty').trim().escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req)
+
+    // If errors throw error with msg and data
+    if (!errors.isEmpty()) {
+      res.json({
+        data: req.body,
+        errors: errors.array(),
+      })
+    }
+    // successful and continue
+    const { author_name, title, text } = req.body
+    // Date by default current date, published by default false
+    const post = new Post({
+      author_name,
+      title,
+      text,
+    })
+
+    post.save(function (err) {
+      if (err) {
+        return next(err)
+      }
+      res.status(200).json({ msg: 'post created' })
+    })
+  },
+])
 
 // update post
 app.put('/posts/:id', (req, res, next) => {})
