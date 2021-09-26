@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const CommentSchema = new Schema({
+const PostSchema = new Schema({
+  title: { type: String, required: true },
   date: { default: Date.now(), type: Date },
   text: { type: String, required: true },
-  user: { required: true, type: String },
+  author_name: { required: true, type: String },
+  published: { type: Boolean, default: false },
 })
 
-CommentSchema.virtual('date_formatted').get(function () {
+PostSchema.virtual('date_formatted').get(function () {
   return this.date.toLocaleDateString('en-gb', {
     year: 'numeric',
     month: 'short',
@@ -17,5 +19,5 @@ CommentSchema.virtual('date_formatted').get(function () {
   })
 })
 
-const Comment = mongoose.model('Comment', CommentSchema)
-module.exports = Comment
+const Posts = mongoose.model('Post', PostSchema)
+module.exports = Posts

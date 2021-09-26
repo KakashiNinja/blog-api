@@ -13,7 +13,9 @@
     "nodemon": "^2.0.13"
   },
   "dependencies": {
+    "async": "^3.2.1",
     "express": "^4.17.1",
+    "mongoose": "^6.0.7",
     "morgan": "^1.10.0"
   }
 }
