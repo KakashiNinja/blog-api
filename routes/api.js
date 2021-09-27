@@ -82,6 +82,20 @@ app.put('/posts/:id', async (req, res, next) => {
 })
 
 // delete post
-app.delete('/posts/:id', (req, res, next) => {})
+app.delete('/posts/:id', async (req, res, next) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id)
+    if (!post) {
+      return res
+        .status(404)
+        .json({ err: `post with id: ${req.params.id} not found!` })
+    }
+    res
+      .status(200)
+      .json({ msg: `post with id: ${req.params.id} successfully deleted` })
+  } catch (err) {
+    next(err)
+  }
+})
 
 module.exports = app
