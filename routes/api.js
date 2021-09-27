@@ -64,7 +64,22 @@ app.post('/posts', [
 ])
 
 // update post
-app.put('/posts/:id', (req, res, next) => {})
+app.put('/posts/:id', async (req, res, next) => {
+  try {
+    const { author_name, title, text } = req.body
+    const post = await Post.findByIdAndUpdate(req.params.id, {
+      author_name,
+      title,
+      text,
+    })
+    if (!post) {
+      return res.status(404).json({ msg: 'updated successfully' })
+    }
+    return res.status(200).json({ msg: 'updated successfully' })
+  } catch (err) {
+    next(err)
+  }
+})
 
 // delete post
 app.delete('/posts/:id', (req, res, next) => {})
