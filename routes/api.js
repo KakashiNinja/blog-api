@@ -25,5 +25,10 @@ app.put('/posts/:postid/comments/:commentid')
 app.delete('/posts/:postid/comments/:commentid')
 
 // Author routes
+app.post('/sign-up')
+
+app.post('/login')
+
+app.get('/logout')
 
 module.exports = app
