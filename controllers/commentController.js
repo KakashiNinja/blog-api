@@ -58,7 +58,7 @@ exports.get_single_comment = async (req, res, next) => {
 
     res.status(200).json({ comment })
   } catch (err) {
-    return next(er)
+    return next(err)
   }
 }
 
@@ -80,4 +80,20 @@ exports.update_comment = async (req, res, next) => {
   }
 }
 
-exports.delete_comment = async (req, res, next) => {}
+exports.delete_comment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findByIdAndDelete(req.params.commentid)
+
+    if (!comment) {
+      res
+        .status(404)
+        .json({ err: `comment with id: ${req.params.commentid} not found` })
+    }
+
+    res.status(200).json({
+      msg: `comment with id: ${req.params.commentid} successfully deleted`,
+    })
+  } catch (err) {
+    return next(err)
+  }
+}
