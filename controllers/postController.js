@@ -67,7 +67,7 @@ exports.update_post = async (req, res, next) => {
       text,
     })
     if (!post) {
-      return res.status(404).json({ msg: 'updated successfully' })
+      return res.status(404).json({ err: 'post not found' })
     }
     return res.status(200).json({ msg: 'updated successfully' })
   } catch (err) {
