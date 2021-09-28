@@ -41,12 +41,13 @@ exports.create_post = [
       })
     }
     // successful and continue
-    const { author_name, title, text } = req.body
+    const { author_name, title, text, published } = req.body
     // Date by default current date, published by default false
     const post = new Post({
       author_name,
       title,
       text,
+      published,
     })
 
     post.save(function (err) {
@@ -60,11 +61,12 @@ exports.create_post = [
 
 exports.update_post = async (req, res, next) => {
   try {
-    const { author_name, title, text } = req.body
+    const { author_name, title, text, published } = req.body
     const post = await Post.findByIdAndUpdate(req.params.id, {
       author_name,
       title,
       text,
+      published,
     })
     if (!post) {
       return res.status(404).json({ err: 'post not found' })
