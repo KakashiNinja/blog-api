@@ -2,6 +2,7 @@ const express = require('express')
 const app = express.Router()
 const post_controller = require('../controllers/postController')
 const comment_controller = require('../controllers/commentController')
+const author_controller = require('../controllers/authorController')
 
 // Post routes
 app.get('/posts', post_controller.get_posts)
@@ -32,10 +33,10 @@ app.delete(
 )
 
 // Author routes
-app.post('/sign-up')
+app.post('/sign-up', author_controller.signup)
 
-app.post('/login')
+app.post('/login', author_controller.login)
 
-app.get('/logout')
+app.get('/logout', author_controller.logout)
 
 module.exports = app
