@@ -55,4 +55,7 @@ exports.signup = [
 
 exports.login = async (req, res, next) => {}
 
-exports.logout = (req, res, next) => {}
+exports.logout = (req, res, next) => {
+  req.logout()
+  res.redirect('/')
+}
