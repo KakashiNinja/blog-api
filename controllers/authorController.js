@@ -53,7 +53,28 @@ exports.signup = [
   },
 ]
 
-exports.login = async (req, res, next) => {}
+exports.login = async (req, res, next) => {
+  passport.authenticate('login', async (err, user, info) => {
+    try {
+      if (err || !user) {
+        const error = new Error('And error occured')
+        return next(error)
+      }
+
+      req.login(user, { session: false }, async (error) => {
+        if (error) return next(error)
+
+        const body = { _id: user._id, username: user.username }
+        const token = jwt.sign({ user: body }, process.env.SECRET, {
+          expiresIn: '1d',
+        })
+        return res.json({ token })
+      })
+    } catch (err) {
+      return next(err)
+    }
+  })(req, res, next)
+}
 
 exports.logout = (req, res, next) => {
   req.logout()
