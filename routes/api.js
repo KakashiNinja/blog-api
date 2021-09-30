@@ -6,7 +6,7 @@ const author_controller = require('../controllers/authorController')
 
 // Post routes
 app.get('/', (req, res) => {
-  res.redirect('/posts')
+  res.redirect('/api/posts')
 })
 
 app.get('/posts', post_controller.get_posts)
