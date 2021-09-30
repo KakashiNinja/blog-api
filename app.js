@@ -100,4 +100,4 @@ app.get('/', (req, res) => {
 
 app.use('/api', apiRoute)
 
-app.listen(3000)
+app.listen(process.env.PORT || 3000)
