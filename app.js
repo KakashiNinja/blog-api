@@ -4,6 +4,7 @@ const app = express()
 const morgan = require('morgan')
 const helmet = require('helmet')
 const compression = require('compression')
+require('dotenv').config()
 
 const passport = require('passport')
 const localStrategy = require('passport-local').Strategy
