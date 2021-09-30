@@ -31,7 +31,6 @@ exports.signup = [
   }),
 
   async (req, res, next) => {
-    const errors = await validationResult(req)
     passport.authenticate('signup', { session: false }, (err, user, info) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {

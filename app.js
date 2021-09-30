@@ -34,18 +34,48 @@ passport.use(
 
         return done(null, user, { message: 'Logged in Successfully' })
       } catch (err) {
-        return next(err)
+        return done(err)
       }
     }
   )
 )
 
-// Middlewares
-app.use(helmet())
-app.use(compression())
-app.use(morgan('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+passport.use(
+  new JWTstrategy(
+    {
+      secretOrKey: 'myblog',
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    },
+    async (token, done) => {
+      try {
+        return done(null, token.user)
+      } catch (error) {
+        done(error)
+      }
+    }
+  )
+)
+
+passport.use(
+  'signup',
+  new localStrategy(
+    {
+      usernameField: 'username',
+      passwordField: 'password',
+    },
+    async (username, password, done) => {
+      try {
+        const user = await Author.create({ username, password })
+        return done(null, user)
+      } catch (error) {
+        done(error)
+      }
+    }
+  )
+)
+
+// API Route
+const apiRoute = require('./routes/api')
 
 // Setup mongoose connection
 const mongoose = require('mongoose')
@@ -56,8 +86,12 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error'))
 
-// API Route
-const apiRoute = require('./routes/api')
+// Middlewares
+app.use(helmet())
+app.use(compression())
+app.use(morgan('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
   res.redirect('/api')
