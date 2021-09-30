@@ -5,6 +5,10 @@ const comment_controller = require('../controllers/commentController')
 const author_controller = require('../controllers/authorController')
 
 // Post routes
+app.get('/', (req, res) => {
+  res.redirect('/posts')
+})
+
 app.get('/posts', post_controller.get_posts)
 
 app.get('/posts/:id', post_controller.get_single_post)
