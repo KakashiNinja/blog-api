@@ -29,6 +29,28 @@ exports.signup = [
     // Indicated the success of this synchronous custom validator
     return true
   }),
+
+  async (req, res, next) => {
+    const errors = await validationResult(req)
+    passport.authenticate('signup', { session: false }, (err, user, info) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.json({
+          username: req.body.username,
+          errors: errors.array(),
+        })
+      }
+
+      if (err) {
+        return next(err)
+      }
+
+      res.json({
+        message: 'Signed-up successfully',
+        user: req.user,
+      })
+    })(req, res, next)
+  },
 ]
 
 exports.login = async (req, res, next) => {}

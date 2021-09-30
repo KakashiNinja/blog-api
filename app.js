@@ -2,10 +2,50 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const helmet = require('helmet')
+const compression = require('compression')
+
+const passport = require('passport')
+const localStrategy = require('passport-local').Strategy
+const JWTstrategy = require('passport-jwt').Strategy
+const ExtractJWT = require('passport-jwt').ExtractJwt
+
+const Author = require('./models/author')
+require('dotenv').config()
+
+// Passport auth
+passport.use(
+  'login',
+  new localStrategy(
+    { usernameField: 'username', passwordField: 'password' },
+    async (username, password, done) => {
+      try {
+        const user = await Author.findOne({ username })
+
+        if (!user) {
+          return done(null, false, { message: 'User not found' })
+        }
+
+        const validate = await user.isValidPassword(password)
+
+        if (!validate) {
+          return done(null, false, { message: 'wrong password' })
+        }
+
+        return done(null, user, { message: 'Logged in Successfully' })
+      } catch (err) {
+        return next(err)
+      }
+    }
+  )
+)
 
 // Middlewares
+app.use(helmet())
+app.use(compression())
 app.use(morgan('dev'))
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 // Setup mongoose connection
 const mongoose = require('mongoose')
