@@ -1,13 +1,13 @@
-const Post = require('../models/post')
-const { body, validationResult } = require('express-validator')
+const Post = require("../models/post")
+const { body, validationResult } = require("express-validator")
 
 exports.get_posts = async (req, res, next) => {
   try {
     const posts = await Post.find({})
     if (!posts) {
-      return res.status(404).json({ err: 'posts not found' })
+      return res.status(404).json({ err: "posts not found" })
     }
-    res.status(200).json({ posts })
+    res.status(200).json(posts)
   } catch (err) {
     next(err)
   }
@@ -18,7 +18,7 @@ exports.get_single_post = async (req, res, next) => {
     const id = req.params.id
     const post = await Post.findById(id)
     if (!post) {
-      return res.status(404).json({ err: 'post by this id not found' })
+      return res.status(404).json({ err: "post by this id not found" })
     }
     res.status(200).json({ post })
   } catch (err) {
@@ -27,8 +27,8 @@ exports.get_single_post = async (req, res, next) => {
 }
 
 exports.create_post = [
-  body('author_name', 'Should not be empty').trim().escape(),
-  body('title', 'Should not be empty').trim().escape(),
+  body("author_name", "Should not be empty").trim().escape(),
+  body("title", "Should not be empty").trim().escape(),
 
   (req, res, next) => {
     const errors = validationResult(req)
@@ -54,7 +54,7 @@ exports.create_post = [
       if (err) {
         return next(err)
       }
-      res.status(200).json({ msg: 'post created' })
+      res.status(200).json({ msg: "post created" })
     })
   },
 ]
@@ -69,9 +69,9 @@ exports.update_post = async (req, res, next) => {
       published,
     })
     if (!post) {
-      return res.status(404).json({ err: 'post not found' })
+      return res.status(404).json({ err: "post not found" })
     }
-    return res.status(200).json({ msg: 'updated successfully' })
+    return res.status(200).json({ msg: "updated successfully" })
   } catch (err) {
     next(err)
   }
