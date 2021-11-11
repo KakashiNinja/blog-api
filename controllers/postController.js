@@ -7,7 +7,7 @@ exports.get_posts = async (req, res, next) => {
     if (!posts) {
       return res.status(404).json({ err: "posts not found" })
     }
-    res.status(200).json(posts)
+    res.status(200).json({posts})
   } catch (err) {
     next(err)
   }
