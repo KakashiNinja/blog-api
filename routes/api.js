@@ -3,7 +3,6 @@ const app = express.Router()
 const post_controller = require("../controllers/postController")
 const comment_controller = require("../controllers/commentController")
 const author_controller = require("../controllers/authorController")
-const passport = require("passport")
 
 // Post routes
 app.get("/", (req, res) => {
@@ -16,13 +15,11 @@ app.get("/posts/:id", post_controller.get_single_post)
 
 app.post(
   "/posts",
-  passport.authenticate("jwt", { session: false }),
   post_controller.create_post
 )
 
 app.put(
   "/posts/:id",
-  passport.authenticate("jwt", { session: false }),
   post_controller.update_post
 )
 
@@ -40,13 +37,11 @@ app.get(
 
 app.put(
   "/posts/:postid/comments/:commentid",
-  passport.authenticate("jwt", { session: false }),
   comment_controller.update_comment
 )
 
 app.delete(
   "/posts/:postid/comments/:commentid",
-  passport.authenticate("jwt", { session: false }),
   comment_controller.delete_comment
 )
 
